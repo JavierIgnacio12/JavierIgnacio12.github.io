@@ -1,0 +1,19 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+#steamInfo {
+    text-align: center;
+    margin-top: 50px;
+}
+
+#steamAvatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+#steamID {
+    margin-top: 10px;
+}
