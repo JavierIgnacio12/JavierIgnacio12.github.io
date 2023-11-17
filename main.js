@@ -10,7 +10,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Realizar la solicitud a la API de Steam
     fetch(steamAPIURL)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('La solicitud no fue exitosa: ' + response.status);
+            }
+            return response.json();
+        })
         .then(data => {
             // Actualizar la información en la página
             const user = data.response.players[0];
