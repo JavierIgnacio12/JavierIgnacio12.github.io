@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     // Reemplaza 'TU_API_KEY' con tu clave de API de Steam
     const apiKey = 'FA51A46803CA9086726A81362DBDF323';
-    
+
     // Reemplaza 'STEAMID64_DEL_USUARIO' con el SteamID64 del usuario
     const steamID = 'STEAMID64_DEL_USUARIO';
 
@@ -18,13 +18,17 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('steamID').textContent += user.steamid;
         })
         .catch(error => console.error('Error al obtener información de Steam:', error));
-            // Configurar el sistema de red para recibir información del servidor
-    net.Receive('SendSteamInfo', function(len) {
-        const steamAvatar = net.ReadString();
-        const steamID = net.ReadString();
+});
 
-        // Actualizar la información en la página
-        document.getElementById('steamAvatar').src = steamAvatar;
-        document.getElementById('steamID').textContent += steamID;
-    });
+// Configurar el sistema de red para recibir información del servidor
+net.Receive('SendSteamInfo', function(len) {
+    const steamAvatar = net.ReadString();
+    const steamID = net.ReadString();
+
+    console.log('Steam Avatar:', steamAvatar);
+    console.log('Steam ID:', steamID);
+
+    // Actualizar la información en la página
+    document.getElementById('steamAvatar').src = steamAvatar;
+    document.getElementById('steamID').textContent += steamID;
 });

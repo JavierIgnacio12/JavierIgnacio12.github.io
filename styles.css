@@ -1,11 +1,18 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-color: #191f36;
+}
+
+#titulo {
+    color:aliceblue;
+    text-align: center;
+    font-size: 3em;
 }
 
 #steamInfo {
     text-align: center;
     margin-top: 50px;
+    color:aliceblue;
 }
 
 #steamAvatar {
