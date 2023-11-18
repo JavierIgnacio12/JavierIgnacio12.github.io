@@ -16,10 +16,10 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Reemplaza '34.176.188.153' con la dirección IP o el nombre de dominio correcto
-    const steamAPIURL = `http://34.176.188.153:3000/steamapi`;
+    const steamAPIURL = `https://34.176.188.153:3000/steamapi`;
 
     // Realizar la solicitud a la API de Steam
-    fetch(steamAPIURL)
+    fetch(steamAPIURL, { mode: 'cors' })
         .then(response => response.json())
         .then(data => {
             // Actualizar la información en la página
