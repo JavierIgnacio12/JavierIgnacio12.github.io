@@ -14,13 +14,13 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(data => {
             // Actualizar la información en la página
             const user = data.response.players[0];
-            document.getElementById('steamAvatar').src = user ? user.avatarfull : 'URL_POR_DEFECTO';
+            document.getElementById('steamAvatar').src = user ? user.avatarfull : 'https://i.pinimg.com/564x/66/c0/be/66c0bede32a10a2f017d789b259af478.jpg';
             document.getElementById('steamID').textContent += user ? user.steamid : 'STEAMID_NO_DISPONIBLE';
         })
         .catch(error => {
             console.error('Error al obtener información de Steam:', error);
             // Puedes manejar el error aquí, por ejemplo, mostrando una imagen predeterminada o un mensaje de error
-            document.getElementById('steamAvatar').src = 'URL_POR_DEFECTO';
+            document.getElementById('steamAvatar').src = 'https://i.pinimg.com/564x/66/c0/be/66c0bede32a10a2f017d789b259af478.jpg';
             document.getElementById('steamID').textContent += 'STEAMID_NO_DISPONIBLE';
         });
 
