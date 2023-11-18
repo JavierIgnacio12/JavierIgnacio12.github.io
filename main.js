@@ -1,39 +1,22 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Reemplaza 'TU_API_KEY' con tu clave de API de Steam
-    const apiKey = 'FA51A46803CA9086726A81362DBDF323';
-
     // Reemplaza 'STEAMID64_DEL_USUARIO' con el SteamID64 del usuario
     const steamID = 'STEAMID64_DEL_USUARIO';
 
-    // URL de la API de Steam para obtener información del usuario
-    const steamAPIURL = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${apiKey}&steamids=${steamID}`;
+    // URL del servidor intermedio con el SteamID64
+    const servidorIntermedioURL = `http://localhost:3000/steamapi?steamid=${steamID}`;
 
-    // Realizar la solicitud a la API de Steam
-    fetch(steamAPIURL)
+    // Realizar la solicitud al servidor intermedio
+    fetch(servidorIntermedioURL)
         .then(response => {
             if (!response.ok) {
-                throw new Error('La solicitud no fue exitosa: ' + response.status);
+                throw new Error('La solicitud al servidor intermedio no fue exitosa: ' + response.status);
             }
             return response.json();
         })
         .then(data => {
             // Actualizar la información en la página
-            const user = data.response.players[0];
-            document.getElementById('steamAvatar').src = user.avatarfull;
-            document.getElementById('steamID').textContent += user.steamid;
+            document.getElementById('steamAvatar').src = data.avatar;
+            document.getElementById('steamID').textContent += data.steamid;
         })
-        .catch(error => console.error('Error al obtener información de Steam:', error));
-});
-
-// Configurar el sistema de red para recibir información del servidor
-net.Receive('SendSteamInfo', function(len) {
-    const steamAvatar = net.ReadString();
-    const steamID = net.ReadString();
-
-    console.log('Steam Avatar:', steamAvatar);
-    console.log('Steam ID:', steamID);
-
-    // Actualizar la información en la página
-    document.getElementById('steamAvatar').src = steamAvatar;
-    document.getElementById('steamID').textContent += steamID;
+        .catch(error => console.error('Error al obtener información de Steam desde el servidor intermedio:', error));
 });
