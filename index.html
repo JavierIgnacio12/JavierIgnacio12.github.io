@@ -1,23 +1,32 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Carga Personalizada</title>
+    <title>Minimal Audio Visualizer</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
-    <div class="loader-container">
-        <div class="music-player">
-            <audio controls volume="0.1" style="display:none" preload="auto" autobuffer autoplay>
-                <source src="musica/donki.mp3" type="audio/mp3">
-                <!-- Tu navegador no soporta la etiqueta de audio. -->
-            </audio>
+    <div class="vz-wrapper">
+        <div class="title">MrGato y sus putas</div>
+        <audio id="myAudio" src="musica/donki.mp3"></audio>
+        <div class="steam-users-list">
+            <h2>Nuestro Staff</h2>
+            <ul class="steam-users">
+                <!-- Lista de Steam IDs (reemplaza con tus Steam IDs) -->
+                <li data-steam-id="STEAM_ID_1">Nombre1</li>
+                <li data-steam-id="STEAM_ID_2">Nombre2</li>
+                <li data-steam-id="STEAM_ID_3">Nombre3</li>
+                <!-- Agrega más nombres según sea necesario -->
+            </ul>
         </div>
-        <div class="wave-container">
-            <div class="circle"></div>
+        <div class="vz-wrapper -canvas">
+            <canvas id="myCanvas" width="600" height="600"></canvas>
         </div>
     </div>
-    <script src="main.js"></script>
+    <!-- Include the minimal-audio-visualizer.js script -->
+    <script src="minimal-audio-visualizer.js"></script>
+    <script src="custom-script.js"></script>
 </body>
 </html>
