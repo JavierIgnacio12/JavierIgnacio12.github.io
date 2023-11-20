@@ -30,23 +30,26 @@ body {
     height: 150px; /* Ajusta según tu diseño */
 }
 
-.wave {
+.circle {
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 10px; /* Ancho de las ondas, ajusta según tu diseño */
-    height: 50%;
-    background-color: #fff; /* Color de las ondas, puedes personalizarlo */
-    border-radius: 10px; /* Ajusta según tu diseño */
-    animation: waveAnimation 1s ease-in-out infinite; /* Animación de las ondas */
+    width: 100px; /* Diámetro del círculo, ajusta según tu diseño */
+    height: 100px; /* Altura del círculo, ajusta según tu diseño */
+    border: 2px solid #fff; /* Borde del círculo, puedes personalizarlo */
+    border-radius: 50%; /* Forma del círculo */
+    animation: pulseAnimation 1s ease-in-out infinite; /* Animación de pulso */
 }
 
-@keyframes waveAnimation {
-    0%, 100% {
-        height: 10%;
+@keyframes pulseAnimation {
+    0% {
+        transform: translateX(-50%) scale(1);
     }
     50% {
-        height: 50%;
+        transform: translateX(-50%) scale(1.2);
+    }
+    100% {
+        transform: translateX(-50%) scale(1);
     }
 }
