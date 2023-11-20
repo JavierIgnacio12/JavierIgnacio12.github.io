@@ -216,6 +216,7 @@ AUDIO.VISUALIZER = (function () {
      *
      * @param  {Object} buffer
      */
+    
     Visualizer.prototype.playSound = function (buffer) {
         this.isPlaying = true;
 
@@ -228,7 +229,25 @@ AUDIO.VISUALIZER = (function () {
         this.resetTimer();
         this.startTimer();
         this.renderFrame();
-    };
+    }; 
+    /*
+    Visualizer.prototype.playSound = function (buffer) {
+        if (this.isPlaying) {
+            this.pauseSound(); // Detener la reproducción actual si ya está reproduciéndose
+        }
+    
+        this.isPlaying = true;
+    
+        if (this.ctx.state === 'suspended') {
+            return this.ctx.resume();
+        }
+    
+        this.sourceNode.buffer = buffer;
+        this.sourceNode.start(0);
+        this.resetTimer();
+        this.startTimer();
+        this.renderFrame();
+    }; */
 
     /**
      * @description

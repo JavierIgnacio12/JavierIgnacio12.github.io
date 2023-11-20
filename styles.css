@@ -48,22 +48,22 @@ body {
 }
 
 .names-list {
-    margin-top: 15%;
+    margin-top: 5%;
     margin-left: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    width: 20%;
-    height: 30vh;
-    background: #333;
+    width: 15%;
+    height: 80vh;
+    background: #172726;
     /*padding: 20px;*/
     padding-left: 20px;
     border-radius: 10px; /* Agrega bordes redondeados a la tarjeta */
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); /* Agrega una sombra suave */
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); /* Agrega una sombra suave */
 }
 
-.name, .names-list h2 {
+.name, .names-list h2, .names-list h3{
     color: #cafdff;
     font-size: 18px;
     margin-bottom: 10px;
@@ -71,7 +71,13 @@ body {
 }
 
 .names-list h2 {
-    font-size: 24px;
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.names-list h3 {
+    font-size: 25px;
     text-align: center;
     margin-bottom: 15px;
 }
@@ -79,4 +85,23 @@ body {
 .name-list {
     list-style: none;
     padding: 0;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.user-info img {
+    max-width: 65px; /* Ajusta el ancho máximo según tus preferencias */
+    border-radius: 50%; /* Hace que la imagen sea circular */
+    margin-right: 10px; /* Espacio entre la imagen y el nombre de usuario */
+}
+
+.user-info p {
+    margin: 0;
+    color: #cafdff;
+    font-size: 20px; /* Ajusta el tamaño del texto según tus preferencias */
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.7); /* Efecto de sombra en el texto */
 }
