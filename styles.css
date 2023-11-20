@@ -7,10 +7,10 @@
 }
 
 .vz-wrapper {
-    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#396362), to(#000000));
-    background: -webkit-radial-gradient(circle, #396362, #000000);
-    background: -moz-radial-gradient(circle, #396362, #000000);
-    background: -ms-radial-gradient(circle, #396362, #000000);
+    background: -webkit-gradient(radial, center center, 0, center center, 460, from(#6A3E91), to(#000000));
+    background: -webkit-radial-gradient(circle, #6A3E91, #000000);
+    background: -moz-radial-gradient(circle, #6A3E91, #000000);
+    background: -ms-radial-gradient(circle, #6A3E91, #000000);
     box-shadow: inset 0 0 160px 0 #000;
     display: flex;
 }
@@ -57,27 +57,28 @@ body {
     width: 15%;
     height: 80vh;
     background: #172726;
+    background: transparent;
     /*padding: 20px;*/
     padding-left: 20px;
     border-radius: 10px; /* Agrega bordes redondeados a la tarjeta */
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); /* Agrega una sombra suave */
+    /*box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); /* Agrega una sombra suave */
 }
 
 .name, .names-list h2, .names-list h3{
     color: #cafdff;
-    font-size: 18px;
+    font-size: 16px;
     margin-bottom: 10px;
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.7);
 }
 
 .names-list h2 {
-    font-size: 30px;
+    font-size: 28px;
     text-align: center;
     margin-bottom: 15px;
 }
 
 .names-list h3 {
-    font-size: 25px;
+    font-size: 23px;
     text-align: center;
     margin-bottom: 15px;
 }
@@ -94,7 +95,7 @@ body {
 }
 
 .user-info img {
-    max-width: 65px; /* Ajusta el ancho máximo según tus preferencias */
+    max-width: 60px; /* Ajusta el ancho máximo según tus preferencias */
     border-radius: 50%; /* Hace que la imagen sea circular */
     margin-right: 10px; /* Espacio entre la imagen y el nombre de usuario */
 }
@@ -102,6 +103,6 @@ body {
 .user-info p {
     margin: 0;
     color: #cafdff;
-    font-size: 20px; /* Ajusta el tamaño del texto según tus preferencias */
+    font-size: 18px; /* Ajusta el tamaño del texto según tus preferencias */
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.7); /* Efecto de sombra en el texto */
 }

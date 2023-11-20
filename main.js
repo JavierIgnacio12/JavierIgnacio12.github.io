@@ -399,7 +399,7 @@ Visualizer.prototype.renderLounge = function () {
         var y = radius - (amplitude / 12 - this.barHeight);
 
         // Ajusta la altura de las barras aquí
-        var h = amplitude / 1.5 + this.barHeight;
+        var h = amplitude / 0.5 + this.barHeight;
 
         this.canvasCtx.save();
         this.canvasCtx.translate(cx + this.barSpacing, cy + this.barSpacing);
@@ -483,7 +483,7 @@ document.addEventListener('DOMContentLoaded', function () {
         style: 'lounge',
         barWidth: 3,
         barHeight: 1,
-        barSpacing: 2,
+        barSpacing: 3,
         barColor: '#cafdff',
         shadowBlur: 20,
         shadowColor: '#ffffff',
