@@ -7,7 +7,7 @@ const apiKey = 'FA51A46803CA9086726A81362DBDF323';
 function updateSteamUsersList() {
     $('.name-list li').each(function() {
         const steamId = $(this).data('steam-id');
-        const apiUrl = `http://34.176.188.153:3000/api/steam-user/${steamId}`;
+        const apiUrl = `https://34.176.188.153:3000/api/steam-user/${steamId}`;
 
         // Realiza la solicitud
         $.getJSON(apiUrl, data => {
