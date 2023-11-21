@@ -13,6 +13,7 @@
     background: -ms-radial-gradient(circle, #6A3E91, #000000);
     box-shadow: inset 0 0 160px 0 #000;
     display: flex;
+    height: 100vh;
 }
 
 #myCanvas {
@@ -57,7 +58,8 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    width: 15%;
+    /* width: 15%; */
+    width: 250px;
     height: 80vh;
     background: #172726;
     background: transparent;
@@ -66,26 +68,36 @@ body {
     border-radius: 10px; /* Agrega bordes redondeados a la tarjeta */
     /*box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); /* Agrega una sombra suave */
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.7), 0 0 30px rgba(255, 255, 255, 0.9);
+    position: fixed;
+    top: 40%; /* Ajusta según sea necesario */
+    left: 10px; /* Ajusta según sea necesario */
+    transform: translateY(-50%); 
 }
 
 .name, .names-list h2, .names-list h3{
     font-family: 'Montserrat', sans-serif;
     color: #cafdff;
-    font-size: 16px;
+    /*font-size: 16px;*/
+    font-size: 2vw;
     margin-bottom: 10px;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.7), 0 0 30px rgba(255, 255, 255, 0.9);
 }
 
 .names-list h2 {
-    font-size: 28px;
+    /*font-size: 28px;*/
+    font-size: 1.9vw;
     text-align: center;
     margin-bottom: 15px;
+    margin-bottom: 1.5vw;
 }
 
 .names-list h3 {
-    font-size: 23px;
+    /*font-size: 23px; */
+    font-size: 1.6vw;
     text-align: center;
     margin-bottom: 15px;
+    margin-bottom: 0.1vw;
+    margin-top: 0.2vw;
 }
 
 .name-list {
@@ -97,17 +109,21 @@ body {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+    margin-bottom: 1vw;
 }
 
 .user-info img {
     max-width: 60px; /* Ajusta el ancho máximo según tus preferencias */
+    max-width: 3vw;
     border-radius: 50%; /* Hace que la imagen sea circular */
     margin-right: 10px; /* Espacio entre la imagen y el nombre de usuario */
 }
 
 .user-info p {
+    font-family: 'Montserrat', sans-serif;
     margin: 0;
     color: #cafdff;
-    font-size: 18px; /* Ajusta el tamaño del texto según tus preferencias */
+    /*font-size: 18px; /* Ajusta el tamaño del texto según tus preferencias */
+    font-size: 0.8vw;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.7), 0 0 30px rgba(255, 255, 255, 0.9);
 }

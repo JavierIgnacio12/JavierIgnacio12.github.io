@@ -127,6 +127,8 @@ AUDIO.VISUALIZER = (function () {
         this.sourceNode.connect(this.analyser);
         this.sourceNode.connect(this.ctx.destination);
 
+        this.sourceNode.volume = 0.2;
+
         this.sourceNode.onended = function () {
             clearInterval(INTERVAL);
             this.sourceNode.disconnect();
@@ -475,9 +477,11 @@ Visualizer.prototype.renderLounge = function () {
 document.addEventListener('DOMContentLoaded', function () {
     'use strict';
 
+
+    
     AUDIO.VISUALIZER.getInstance({
         autoplay: true,
-        loop: true,
+        loop: false,
         audio: 'myAudio',
         canvas: 'myCanvas',
         style: 'lounge',
@@ -489,4 +493,6 @@ document.addEventListener('DOMContentLoaded', function () {
         shadowColor: '#ffffff',
         font: ['12px', 'Helvetica']
     });
+
+
 }, false);
