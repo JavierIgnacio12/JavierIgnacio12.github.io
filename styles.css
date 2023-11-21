@@ -36,6 +36,8 @@ body {
 }
 
 .title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; 
     position: absolute;
     top: 20px; /* Ajusta la posición vertical según sea necesario */
     left: 50%;
@@ -48,6 +50,7 @@ body {
 }
 
 .names-list {
+    font-family: 'Montserrat', sans-serif;
     margin-top: 5%;
     margin-left: 20px;
     display: flex;
@@ -62,13 +65,15 @@ body {
     padding-left: 20px;
     border-radius: 10px; /* Agrega bordes redondeados a la tarjeta */
     /*box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); /* Agrega una sombra suave */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.7), 0 0 30px rgba(255, 255, 255, 0.9);
 }
 
 .name, .names-list h2, .names-list h3{
+    font-family: 'Montserrat', sans-serif;
     color: #cafdff;
     font-size: 16px;
     margin-bottom: 10px;
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.7);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.7), 0 0 30px rgba(255, 255, 255, 0.9);
 }
 
 .names-list h2 {
@@ -104,5 +109,5 @@ body {
     margin: 0;
     color: #cafdff;
     font-size: 18px; /* Ajusta el tamaño del texto según tus preferencias */
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.7); /* Efecto de sombra en el texto */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.7), 0 0 30px rgba(255, 255, 255, 0.9);
 }
