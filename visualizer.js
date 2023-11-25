@@ -42,20 +42,6 @@ AUDIO.VISUALIZER = (function () {
         this.shadowColor = cfg.shadowColor || '#ffffff';
         this.font = cfg.font || ['12px', 'Helvetica'];
         this.gradient = null;
-        this.setVolume = function (volume) {
-            console.log('Setting volume to:', volume);
-            if (this.sourceNode) {
-                var gainNode = this.ctx.createGain();
-                gainNode.gain.value = volume;
-                this.sourceNode.connect(gainNode);
-                gainNode.connect(this.analyser);
-                gainNode.connect(this.ctx.destination);
-            }
-            return this;
-        };
-        if (cfg.volume !== undefined) {
-            this.setVolume(cfg.volume); 
-        }
     }
 
     /**
@@ -158,6 +144,12 @@ AUDIO.VISUALIZER = (function () {
     Visualizer.prototype.bindEvents = function () {
         var _this = this;
 
+        // Agrega el evento de cambio al deslizante de volumen
+        var volumeSlider = document.getElementById('volume-slider');
+        volumeSlider.addEventListener('input', function () {
+        _this.setVolume(volumeSlider.value);
+        });
+
         document.addEventListener('click', function (e) {
             if (e.target === _this.canvas) {
                 e.stopPropagation();
@@ -178,6 +170,20 @@ AUDIO.VISUALIZER = (function () {
 
     /**
      * @description
+     * Set the volume of the audio.
+     *
+     * @param {number} value - Volume value (between 0 and 100).
+     */
+    Visualizer.prototype.setVolume = function (value) {
+        var volume = value / 100;
+        volume = Math.max(0, Math.min(1, volume));
+        this.sourceNode.gainNode.gain.value = volume;
+        console.log('Volumen actual:', volume);
+        console.log('Valor real del nodo de ganancia:', this.sourceNode.gainNode.gain.value);
+    };
+
+    /**
+     * @description
      * Load sound file.
      */
     Visualizer.prototype.loadSound = function () {
@@ -186,8 +192,18 @@ AUDIO.VISUALIZER = (function () {
         req.responseType = 'arraybuffer';
         this.canvasCtx.fillText('Loading...', this.canvas.width / 2 + 10, this.canvas.height / 2);
 
+        // req.onload = function () {
+        //     this.ctx.decodeAudioData(req.response, this.playSound.bind(this), this.onError.bind(this));
+        // }.bind(this);
         req.onload = function () {
             this.ctx.decodeAudioData(req.response, this.playSound.bind(this), this.onError.bind(this));
+            // Crear un nodo de ganancia (gain node) para controlar el volumen
+            this.sourceNode.gainNode = this.ctx.createGain();
+            this.sourceNode.connect(this.sourceNode.gainNode);
+            this.sourceNode.gainNode.connect(this.analyser);
+            this.sourceNode.gainNode.connect(this.ctx.destination);
+            // Establecer el volumen inicial
+            this.setVolume(10);
         }.bind(this);
 
         req.send();
@@ -412,10 +428,10 @@ AUDIO.VISUALIZER = (function () {
 document.addEventListener('DOMContentLoaded', function () {
     'use strict';
 
-    AUDIO.VISUALIZER.getInstance({
+    window.audioVisualizer = AUDIO.VISUALIZER.getInstance({
         autoplay: true,
         loop: true,
-        audio: 'myAudio',
+        audio: 'myAudio1',
         canvas: 'myCanvas',
         style: 'lounge',
         barWidth: 3,
@@ -425,10 +441,8 @@ document.addEventListener('DOMContentLoaded', function () {
         shadowBlur: 20,
         shadowColor: '#ffffff',
         font: ['12px', 'Helvetica'],
-        volume: 0.0 // Nuevo parámetro para el volumen
 
 
     });
-
 
 }, false);

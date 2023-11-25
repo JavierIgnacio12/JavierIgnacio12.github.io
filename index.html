@@ -13,8 +13,8 @@
 <body>
     <div class="vz-wrapper">
         <div class="title">[Multimod] MrGato y sus putas</div>
-        <audio id="myAudio1" class="audio-element" src="musica/donki.mp3"></audio>
-        <audio id="myAudio2" class="audio-element" src="musica/avalanche.mp3"></audio>
+        <!-- <audio id="myAudio1" class="audio-element" src="musica/donki.mp3"></audio>
+        <audio id="myAudio2" class="audio-element" src="musica/avalanche.mp3"></audio> -->
         
         <div class="names-list">
             <h2>Nuestro Staff</h2>
@@ -35,7 +35,11 @@
                 <!-- Agrega más nombres según sea necesario -->
         </div>
         <div class="vz-wrapper">
-            <audio id="myAudio" volume= "0.1" src="musica/donki.mp3" data-author="Beethoven" data-title="Allegro"></audio>
+            <audio id="myAudio1" src="musica/donki.mp3" data-author="Beethoven" data-title="Allegro"></audio>
+            <div class="volume-control">
+                <label for="volume-slider">Volumen:</label>
+                <input type="range" id="volume-slider" min="0" max="100" value="0.1">
+            </div>
             <div class="vz-wrapper -canvas" style="width: 90%; height: 100%;">
                 <canvas id="myCanvas" width="1920" height="1080"></canvas>
             </div>

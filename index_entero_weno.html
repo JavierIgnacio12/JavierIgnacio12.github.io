@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reproductor de Audio</title>
+</head>
+<body>
+
+<audio id="miAudio" controls autoplay>
+    <source src="musica/donki.mp3" type="audio/mp3">
+    Tu navegador no soporta el elemento de audio.
+</audio>
+
+<label for="volumen">Volumen:</label>
+<input type="range" id="volumen" name="volumen" min="0" max="1" step="0.1" value="0.1" onchange="cambiarVolumen()">
+
+<script>
+    var miAudio = document.getElementById("miAudio");
+    var sliderVolumen = document.getElementById("volumen");
+
+    miAudio.volume = parseFloat(sliderVolumen.value);
+
+    // Reflejar el volumen predeterminado en el control deslizante
+    sliderVolumen.value = miAudio.volume;   
+
+    function cambiarVolumen() {
+        miAudio.volume = sliderVolumen.value;
+    }
+</script>
+</body>
+</html>
