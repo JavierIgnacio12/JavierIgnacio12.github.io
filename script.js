@@ -1,9 +1,42 @@
 var noise = new SimplexNoise();
 var vizInit = function () {
+  var file = document.getElementById("thefile");
   var audio = document.getElementById("audio");
+  var fileLabel = document.querySelector("label.file");
+  var preloadedAudio = document.getElementById("preloaded-audio");
+
+  function playAudio(src) {
+    audio.src = src;
+    audio.volume = 0.05;  // Ajusta el volumen al 10%
+    audio.load();
+    audio.play();
+    play();
+  }
+
+  // Reproduce la primera canción precargada automáticamente al cargar la página
+  if (preloadedAudio.options.length > 1) {
+    preloadedAudio.selectedIndex = 1;  // Selecciona la primera canción precargada
+    playAudio(preloadedAudio.options[1].value);
+  }
+
+  file.onchange = function () {
+    fileLabel.classList.add('normal');
+    audio.classList.add('active');
+    var files = this.files;
+    if (files.length > 0) {
+      playAudio(URL.createObjectURL(files[0]));
+    }
+  };
+
+  preloadedAudio.onchange = function () {
+    const selectedValue = this.value;
+    if (selectedValue) {
+      playAudio(selectedValue);
+    }
+  };
 
   function play() {
-    var context = new (window.AudioContext || window.webkitAudioContext)();
+    var context = new AudioContext();
     var src = context.createMediaElementSource(audio);
     var analyser = context.createAnalyser();
     src.connect(analyser);
@@ -11,7 +44,6 @@ var vizInit = function () {
     analyser.fftSize = 512;
     var bufferLength = analyser.frequencyBinCount;
     var dataArray = new Uint8Array(bufferLength);
-
     var scene = new THREE.Scene();
     var group = new THREE.Group();
     var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -101,7 +133,7 @@ var vizInit = function () {
     }
 
     function makeRoughBall(mesh, bassFr, treFr) {
-      mesh.geometry.vertices.forEach(function(vertex) {
+      mesh.geometry.vertices.forEach(function (vertex) {
         var offset = mesh.geometry.parameters.radius;
         var amp = 7;
         var time = window.performance.now();
@@ -117,7 +149,7 @@ var vizInit = function () {
     }
 
     function makeRoughGround(mesh, distortionFr) {
-      mesh.geometry.vertices.forEach(function(vertex) {
+      mesh.geometry.vertices.forEach(function (vertex) {
         var amp = 2;
         var time = Date.now();
         var distance = (noise.noise2D(vertex.x + time * 0.0003, vertex.y + time * 0.0001) + 0) * distortionFr * amp;
@@ -140,21 +172,22 @@ var vizInit = function () {
     }
 
     function avg(arr) {
-      var total = arr.reduce(function(sum, b) {
+      var total = arr.reduce(function (sum, b) {
         return sum + b;
       });
       return (total / arr.length);
     }
 
     function max(arr) {
-      return arr.reduce(function(a, b) {
+      return arr.reduce(function (a, b) {
         return Math.max(a, b);
       });
     }
+
+    audio.play();
   }
+}
 
-  audio.play();
-};
+window.onload = vizInit;
 
-window.addEventListener('load', vizInit);
 
