@@ -73,9 +73,25 @@
             }
         }
 
-        // Intenta iniciar el audio después de una pequeña animación
-        document.getElementById('anim').style.transform = 'scale(1.1)';
-        setTimeout(initAudio, 1000);
+        function attemptAudioContextResume() {
+            if (context && context.state === 'suspended') {
+                context.resume().then(() => {
+                    console.log('AudioContext resumed');
+                }).catch(error => {
+                    console.error('Error resuming AudioContext:', error);
+                });
+            }
+        }
+
+        function animate() {
+            document.getElementById('anim').style.transform = `scale(${1 + Math.sin(Date.now() / 1000) * 0.1})`;
+            attemptAudioContextResume();
+            requestAnimationFrame(animate);
+        }
+
+        // Inicia la animación y el intento de reanudar el contexto de audio
+        initAudio();
+        animate();
 
         function play() {
             const bufferLength = analyser.frequencyBinCount;
@@ -226,5 +242,3 @@
   </script>
 </body>
 </html>
-
-
