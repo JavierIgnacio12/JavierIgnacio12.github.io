@@ -26,6 +26,7 @@
     </select>
     <audio id="audio" controls style="display: none;"></audio>
     <div id="out"></div>
+    <div id="anim" style="width: 1px; height: 1px; position: absolute; top: 0; left: 0; background-color: red;"></div>
   </div>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/84/three.min.js'></script>
   <script src='https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/controls/OrbitControls.js'></script>
@@ -34,10 +35,8 @@
   <script src="./script.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const file = document.getElementById('thefile');
         const audio = document.getElementById('audio');
         const preloadedAudio = document.getElementById('preloaded-audio');
-        const fileLabel = document.querySelector("label.file");
         let context;
         let src;
         let analyser;
@@ -67,27 +66,16 @@
             });
         }
 
-        // Intenta reproducir una canción aleatoria al cargar la página
-        const randomSong = getRandomSong();
-        if (randomSong) {
-            playAudio(randomSong);
+        function initAudio() {
+            const randomSong = getRandomSong();
+            if (randomSong) {
+                playAudio(randomSong);
+            }
         }
 
-        file.onchange = function() {
-            const files = this.files;
-            if (files.length > 0) {
-                fileLabel.classList.add('normal');
-                audio.classList.add('active');
-                playAudio(URL.createObjectURL(files[0]));
-            }
-        };
-
-        preloadedAudio.onchange = function() {
-            const selectedValue = this.value;
-            if (selectedValue) {
-                playAudio(selectedValue);
-            }
-        };
+        // Intenta iniciar el audio después de una pequeña animación
+        document.getElementById('anim').style.transform = 'scale(1.1)';
+        setTimeout(initAudio, 1000);
 
         function play() {
             const bufferLength = analyser.frequencyBinCount;
@@ -238,4 +226,5 @@
   </script>
 </body>
 </html>
+
 
