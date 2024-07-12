@@ -2,76 +2,58 @@ var noise = new SimplexNoise();
 var vizInit = function () {
   var file = document.getElementById("thefile");
   var audio = document.getElementById("audio");
+  var fileLabel = document.querySelector("label.file");
   var preloadedAudio = document.getElementById("preloaded-audio");
-  let context;
-  let src;
-  let analyser;
 
   function playAudio(src) {
     audio.src = src;
     audio.load();
-    audio.play().then(() => {
-      if (!context) {
-        context = new AudioContext();
-        src = context.createMediaElementSource(audio);
-        analyser = context.createAnalyser();
-        src.connect(analyser);
-        analyser.connect(context.destination);
-        analyser.fftSize = 512;
-        play();
-      }
-    }).catch(error => {
-      console.error('Error playing audio:', error);
-    });
+    audio.play();
+    play();
   }
 
-  function getRandomSong() {
-    const options = Array.from(preloadedAudio.options);
-    const validOptions = options.filter(option => option.value !== "");
-    const randomIndex = Math.floor(Math.random() * validOptions.length);
-    return validOptions[randomIndex].value;
+  // Reproduce la primera canción precargada automáticamente al cargar la página
+  if (preloadedAudio.options.length > 1) {
+    preloadedAudio.selectedIndex = 1;  // Selecciona la primera canción precargada
+    playAudio(preloadedAudio.options[1].value);
   }
 
-  function initAudio() {
-    const randomSong = getRandomSong();
-    if (randomSong) {
-      playAudio(randomSong);
+  file.onchange = function () {
+    fileLabel.classList.add('normal');
+    audio.classList.add('active');
+    var files = this.files;
+    if (files.length > 0) {
+      playAudio(URL.createObjectURL(files[0]));
     }
-  }
+  };
 
-  function attemptAudioContextResume() {
-    if (context && context.state === 'suspended') {
-      context.resume().then(() => {
-        console.log('AudioContext resumed');
-      }).catch(error => {
-        console.error('Error resuming AudioContext:', error);
-      });
+  preloadedAudio.onchange = function () {
+    const selectedValue = this.value;
+    if (selectedValue) {
+      playAudio(selectedValue);
     }
-  }
-
-  function animate() {
-    requestAnimationFrame(animate);
-    attemptAudioContextResume();
-  }
-
-  // Inicia la animación y el intento de reanudar el contexto de audio
-  initAudio();
-  animate();
+  };
 
   function play() {
+    var context = new AudioContext();
+    var src = context.createMediaElementSource(audio);
+    var analyser = context.createAnalyser();
+    src.connect(analyser);
+    analyser.connect(context.destination);
+    analyser.fftSize = 512;
     var bufferLength = analyser.frequencyBinCount;
     var dataArray = new Uint8Array(bufferLength);
     var scene = new THREE.Scene();
     var group = new THREE.Group();
     var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 0, 150);  // Ajuste la posición de la cámara
+    camera.position.set(0, 0, 100);
     camera.lookAt(scene.position);
     scene.add(camera);
 
     var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    var planeGeometry = new THREE.PlaneGeometry(800, 800, 40, 40);  // Ajuste la geometría del plano
+    var planeGeometry = new THREE.PlaneGeometry(800, 800, 20, 20);
     var planeMaterial = new THREE.MeshLambertMaterial({
       color: 0x6904ce,
       side: THREE.DoubleSide,
@@ -88,7 +70,7 @@ var vizInit = function () {
     plane2.position.set(0, -30, 0);
     group.add(plane2);
 
-    var icosahedronGeometry = new THREE.IcosahedronGeometry(15, 4);  // Ajuste la geometría del icosaedro
+    var icosahedronGeometry = new THREE.IcosahedronGeometry(10, 4);
     var lambertMaterial = new THREE.MeshLambertMaterial({
       color: 0xff00ee,
       wireframe: true
@@ -200,8 +182,11 @@ var vizInit = function () {
         return Math.max(a, b);
       });
     }
+
+    audio.play();
   }
 }
 
-window.onload = vizInit;
+window
+
 
