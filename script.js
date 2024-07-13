@@ -1,193 +1,132 @@
-var noise = new SimplexNoise();
-var vizInit = function () {
-  var file = document.getElementById("thefile");
-  var audio = document.getElementById("audio");
-  var fileLabel = document.querySelector("label.file");
-  var preloadedAudio = document.getElementById("preloaded-audio");
 
-  function playAudio(src) {
-    audio.src = src;
-    audio.volume = 0.05;  // Ajusta el volumen al 10%
-    audio.load();
-    audio.play();
-    play();
-  }
+var pieces, radius, fft, mapMouseX, mapMouseY, audio, toggleBtn, uploadBtn, uploadedAudio, uploadAnim;
+var colorPalette = ["#0f0639", "#ff006a", "#ff4f00", "#00f9d9"];
+var uploadLoading = false;
 
-  // Reproduce la primera canción precargada automáticamente al cargar la página
-  if (preloadedAudio.options.length > 1) {
-    preloadedAudio.selectedIndex = 1;  // Selecciona la primera canción precargada
-    playAudio(preloadedAudio.options[1].value);
-  }
-
-  file.onchange = function () {
-    fileLabel.classList.add('normal');
-    audio.classList.add('active');
-    var files = this.files;
-    if (files.length > 0) {
-      playAudio(URL.createObjectURL(files[0]));
-    }
-  };
-
-  preloadedAudio.onchange = function () {
-    const selectedValue = this.value;
-    if (selectedValue) {
-      playAudio(selectedValue);
-    }
-  };
-
-  function play() {
-    var context = new AudioContext();
-    var src = context.createMediaElementSource(audio);
-    var analyser = context.createAnalyser();
-    src.connect(analyser);
-    analyser.connect(context.destination);
-    analyser.fftSize = 512;
-    var bufferLength = analyser.frequencyBinCount;
-    var dataArray = new Uint8Array(bufferLength);
-    var scene = new THREE.Scene();
-    var group = new THREE.Group();
-    var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 0, 100);
-    camera.lookAt(scene.position);
-    scene.add(camera);
-
-    var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-
-    var planeGeometry = new THREE.PlaneGeometry(800, 800, 20, 20);
-    var planeMaterial = new THREE.MeshLambertMaterial({
-      color: 0x6904ce,
-      side: THREE.DoubleSide,
-      wireframe: true
-    });
-
-    var plane = new THREE.Mesh(planeGeometry, planeMaterial);
-    plane.rotation.x = -0.5 * Math.PI;
-    plane.position.set(0, 30, 0);
-    group.add(plane);
-
-    var plane2 = new THREE.Mesh(planeGeometry, planeMaterial);
-    plane2.rotation.x = -0.5 * Math.PI;
-    plane2.position.set(0, -30, 0);
-    group.add(plane2);
-
-    var icosahedronGeometry = new THREE.IcosahedronGeometry(10, 4);
-    var lambertMaterial = new THREE.MeshLambertMaterial({
-      color: 0xff00ee,
-      wireframe: true
-    });
-
-    var ball = new THREE.Mesh(icosahedronGeometry, lambertMaterial);
-    ball.position.set(0, 0, 0);
-    group.add(ball);
-
-    var ambientLight = new THREE.AmbientLight(0xaaaaaa);
-    scene.add(ambientLight);
-
-    var spotLight = new THREE.SpotLight(0xffffff);
-    spotLight.intensity = 0.9;
-    spotLight.position.set(-10, 40, 20);
-    spotLight.lookAt(ball);
-    spotLight.castShadow = true;
-    scene.add(spotLight);
-
-    scene.add(group);
-
-    document.getElementById('out').appendChild(renderer.domElement);
-
-    window.addEventListener('resize', onWindowResize, false);
-
-    render();
-
-    function render() {
-      analyser.getByteFrequencyData(dataArray);
-
-      var lowerHalfArray = dataArray.slice(0, (dataArray.length / 2) - 1);
-      var upperHalfArray = dataArray.slice((dataArray.length / 2) - 1, dataArray.length - 1);
-
-      var overallAvg = avg(dataArray);
-      var lowerMax = max(lowerHalfArray);
-      var lowerAvg = avg(lowerHalfArray);
-      var upperMax = max(upperHalfArray);
-      var upperAvg = avg(upperHalfArray);
-
-      var lowerMaxFr = lowerMax / lowerHalfArray.length;
-      var lowerAvgFr = lowerAvg / lowerHalfArray.length;
-      var upperMaxFr = upperMax / upperHalfArray.length;
-      var upperAvgFr = upperAvg / upperHalfArray.length;
-
-      makeRoughGround(plane, modulate(upperAvgFr, 0, 1, 0.5, 4));
-      makeRoughGround(plane2, modulate(lowerMaxFr, 0, 1, 0.5, 4));
-
-      makeRoughBall(ball, modulate(Math.pow(lowerMaxFr, 0.8), 0, 1, 0, 8), modulate(upperAvgFr, 0, 1, 0, 4));
-
-      group.rotation.y += 0.005;
-      renderer.render(scene, camera);
-      requestAnimationFrame(render);
-    }
-
-    function onWindowResize() {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    }
-
-    function makeRoughBall(mesh, bassFr, treFr) {
-      mesh.geometry.vertices.forEach(function (vertex) {
-        var offset = mesh.geometry.parameters.radius;
-        var amp = 7;
-        var time = window.performance.now();
-        vertex.normalize();
-        var rf = 0.00001;
-        var distance = (offset + bassFr) + noise.noise3D(vertex.x + time * rf * 7, vertex.y + time * rf * 8, vertex.z + time * rf * 9) * amp * treFr;
-        vertex.multiplyScalar(distance);
-      });
-      mesh.geometry.verticesNeedUpdate = true;
-      mesh.geometry.normalsNeedUpdate = true;
-      mesh.geometry.computeVertexNormals();
-      mesh.geometry.computeFaceNormals();
-    }
-
-    function makeRoughGround(mesh, distortionFr) {
-      mesh.geometry.vertices.forEach(function (vertex) {
-        var amp = 2;
-        var time = Date.now();
-        var distance = (noise.noise2D(vertex.x + time * 0.0003, vertex.y + time * 0.0001) + 0) * distortionFr * amp;
-        vertex.z = distance;
-      });
-      mesh.geometry.verticesNeedUpdate = true;
-      mesh.geometry.normalsNeedUpdate = true;
-      mesh.geometry.computeVertexNormals();
-      mesh.geometry.computeFaceNormals();
-    }
-
-    function fractionate(val, minVal, maxVal) {
-      return (val - minVal) / (maxVal - minVal);
-    }
-
-    function modulate(val, minVal, maxVal, outMin, outMax) {
-      var fr = fractionate(val, minVal, maxVal);
-      var delta = outMax - outMin;
-      return outMin + (fr * delta);
-    }
-
-    function avg(arr) {
-      var total = arr.reduce(function (sum, b) {
-        return sum + b;
-      });
-      return (total / arr.length);
-    }
-
-    function max(arr) {
-      return arr.reduce(function (a, b) {
-        return Math.max(a, b);
-      });
-    }
-
-    audio.play();
-  }
+function preload() {
+    audio = loadSound("audio/DEMO_2.mp3");
 }
 
-window.onload = vizInit;
+function uploaded(file) {
+    uploadLoading = true;
+    uploadedAudio = loadSound(file.data, uploadedAudioPlay);
+}
+
+function uploadedAudioPlay(audioFile) {
+
+    uploadLoading = false;
+
+    if (audio.isPlaying()) {
+        audio.pause();
+    }
+
+    audio = audioFile;
+    audio.loop();
+}
+
+function setup() {
+
+    uploadAnim = select('#uploading-animation');
+
+    createCanvas(windowWidth, windowHeight);
+
+    toggleBtn = createButton("Play / Pause");
+
+    uploadBtn = createFileInput(uploaded);
+
+    uploadBtn.addClass("upload-btn");
+
+    toggleBtn.addClass("toggle-btn");
+    
+    toggleBtn.mousePressed(toggleAudio);
+
+    fft = new p5.FFT();
+    audio.loop();
+
+    pieces = 4;
+    radius = windowHeight / 4;
+
+}
+
+function draw() {
+
+    // Add a loading animation for the uploaded track
+    if (uploadLoading) {
+        uploadAnim.addClass('is-visible');
+    } else {
+        uploadAnim.removeClass('is-visible');
+    }
+
+    background(colorPalette[0]);
+
+    fft.analyze();
+    var bass = fft.getEnergy("bass");
+    var treble = fft.getEnergy(100, 150);
+    var mid = fft.getEnergy("mid");
+
+    var mapbass = map(bass, 0, 255, -100, 800);
+    var scalebass = map(bass, 0, 255, 0.5, 1.2);
+
+    var mapMid = map(mid, 0, 255, -radius / 4, radius * 4);
+    var scaleMid = map(mid, 0, 255, 1, 1.5);
+
+    var mapTreble = map(treble, 0, 255, -radius / 4, radius * 4);
+    var scaleTreble = map(treble, 0, 255, 1, 1.5);
+
+    mapMouseX = map(mouseX, 0, width, 2, 0.1);
+    mapMouseY = map(mouseY, 0, height, windowHeight / 8, windowHeight / 6);
+
+    pieces = mapMouseX;
+    radius = mapMouseY;
+
+    var mapScaleX = map(mouseX, 0, width, 1, 0);
+    var mapScaleY = map(mouseY, 0, height, 0, 1);
 
 
+    translate(width / 2, height / 2);
+
+    for (i = 0; i < pieces; i += 0.01) {
+
+        rotate(TWO_PI / pieces);
+
+        /*----------  BASS  ----------*/
+        push();
+        strokeWeight(1);
+        stroke(colorPalette[1]);
+        scale(scalebass);
+        rotate(frameCount * -0.5);
+        line(mapbass, radius / 2, radius, radius);
+        line(-mapbass, -radius / 2, radius, radius);
+        pop();
+
+
+        /*----------  MID  ----------*/
+        push();
+        strokeWeight(1);
+        stroke(colorPalette[2]);
+        line(mapMid, radius, radius * 2, radius * 2);
+        pop();
+
+
+        /*----------  TREMBLE  ----------*/
+        push();
+        stroke(colorPalette[3]);
+        scale(scaleTreble);
+        line(mapTreble, radius / 2, radius, radius);
+        pop();
+
+    }
+
+}
+
+function toggleAudio() {
+    if (audio.isPlaying()) {
+        audio.pause();
+    } else {
+        audio.play();
+    }
+}
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+}
